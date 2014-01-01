@@ -1,0 +1,12 @@
+﻿由于编辑器的特殊性，本插件的安装使用需要注意以下事项：
+1、插件安装好之后，还需要修改edit-form-advanced.php文件中关于编辑器容器的模板代码。
+2、插件目录下的ue3.3.1-edit-form-advanced.php中是已经修改好的对应文件，适用于wp3.3.1版本。ue3.3.2-edit-form-advanced.php适用于wp3.3.2版本
+3、如需修改编辑器的各种行为，可直接修改插件主文件main.php下方实例化对象时传入的参数即可，参数名称请参考editor_config.js文件。
+4、此版本暂不支持自动保存功能。关闭默认的自动保存及自动草稿方法可参考网上资料，此处不再详述。
+5、不需要使用编辑器时，直接停用即可还原成系统默认的编辑器。
+6、本插件适用的wordpress版本：3.3.1+
+
+PS:
+	1.插件目录下的edit-form-advanced.php中是已经修改好的对应文件，适用于wp3.7.1版本。插件安装好之后，可以将插件目录下的edit-form-advanced.php复制到wp-admin目录下，覆盖原来的文件。
+	2.在这个插件中，相比标准的Ueditor，添加了json editor， onekey wordimage upload等功能。
+	3.If you need English version, please send me email: rib.liu@qq.com

@@ -1,0 +1,168 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN"
+        "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html;charset=utf-8">
+
+    <script type="text/javascript" src="../internal.js"></script>
+    <!-- jsoneditor -->
+    <link rel="stylesheet" type="text/css" href="jsoneditor.css">
+    <script type="text/javascript" src="jsoneditor.js"></script>
+    <script type="text/javascript" src="jsoneditor-extra.js"></script>
+    <!-- ace code editor -->
+    <script type="text/javascript" src="lib/ace/ace.js"></script>
+    <script type="text/javascript" src="lib/ace/mode-json.js"></script>
+    <script type="text/javascript" src="lib/ace/theme-textmate.js"></script>
+    <script type="text/javascript" src="lib/ace/theme-jsoneditor.js"></script>
+
+    <!-- json lint -->
+    <script type="text/javascript" src="lib/jsonlint/jsonlint.js"></script>
+
+    <style type="text/css">
+        body {
+            font: 10.5pt arial;
+            color: #4d4d4d;
+            line-height: 150%;
+        }
+
+        code {
+            background-color: #f5f5f5;
+        }
+
+        #jsoneditor {
+            height: 420px;
+        }
+    </style>
+</head>
+<script type="text/javascript">
+
+</script>
+<body id="panel" >
+
+<div id="jsoneditor"></div>
+<div id="save_as">Save as Tree view<input id='save_as_tree' type="checkbox" checked='true'
+                             style="vertical-align: text-bottom; margin-bottom:2px;"></div>
+<script type="text/javascript">
+    var container = document.getElementById('jsoneditor');
+
+    var options = {
+        mode: 'tree',
+        modes: ['code', 'form', 'text', 'tree', 'view'], // allowed modes
+        error: function (err) {
+            alert(err.toString());
+        }
+    };
+
+    var json = {
+        "array": [1, 2, 3],
+        "boolean": true,
+        "null": null,
+        "number": 123,
+        "object": {"a": "b", "c": "d"},
+        "string": "Hello World"
+    };
+
+
+    window.onload = function () {
+        var MyJsonEditor = new jsoneditor.JSONEditor(container, options);
+        try {
+            var jsonStr = editor.getContentTxt();
+            var jsonObj = JSON.parse(jsonStr);
+            MyJsonEditor.set(jsonObj);
+        } catch (ex) {
+            console.log(ex.name + ":" + ex.message);
+            alert(ex.name + ":" + ex.message);
+        }
+        console.log(dialog);
+
+        //点击OK按钮
+        dialog.onok = function () {
+            var chk = document.getElementById('save_as_tree');
+            if (chk.checked) {
+                var jsonObj = MyJsonEditor.get();
+                editor.setContent(getJsonHtml(jsonObj));
+            }
+            else {
+                var jsonStr = MyJsonEditor.getText();
+                var str = "<p style='line-height: 16px;'>" + htmlspecialchars(jsonStr, 'ENT_QUOTES') + "</p>";
+                editor.setContent(str);
+            }
+        };
+        dialog.oncancel = function () {
+        };
+
+
+        resizeData = new Object();
+
+        div = window.parent.document.getElementById(dialog.id + "_body");
+        parentDialog = null;
+        for (; ; div = div.parentElement) {
+            clz = div.getAttribute('class');
+            clzes = clz.split(' ');
+            for (var i = 0; i < clzes.length; i++) {
+                if (clzes[i] == 'edui-dialog') {
+                    parentDialog = div;
+                    break;
+                }
+            }
+            if (parentDialog != null) {
+                break;
+            }
+        }
+        footer = parentDialog.getElementsByClassName('edui-dialog-foot')[0];
+        titleBar = parentDialog.getElementsByClassName('edui-dialog-titlebar')[0];
+        dlgBody = parentDialog.getElementsByClassName('edui-dialog-body')[0];
+        dlgContent = parentDialog.getElementsByClassName('edui-dialog-content')[0];
+        frm = window.parent.document.getElementById(dialog.id + '_iframe');
+
+        var getCurrentStyle = function (node) {
+            var style = null;
+            if (window.getComputedStyle) {
+                style = window.getComputedStyle(node, null);
+            } else {
+                style = node.currentStyle;
+            }
+            return style;
+        };
+
+        var menubar = window.parent.document.getElementById('adminmenu');
+        var rect = menubar.getBoundingClientRect();
+        var left = (rect.right + 20) + 'px';
+        var width = (window.parent.document.body.clientWidth - rect.right - 30) + 'px';
+        var height = window.parent.document.body.clientHeight - 5;// - me.editor.options['topOffset'];
+        menubar = window.parent.document.getElementById('wpadminbar');
+        rect = menubar.getBoundingClientRect();
+        resizeData.dlgLeft = left;
+        resizeData.dlgTop = dialog.editor.options['topOffset'] + 'px';
+        resizeData.dlgWidth = width;
+        resizeData.dlgHeight = height + 'px';
+        resizeData.frmWidth = width;
+        rect = titleBar.getBoundingClientRect();
+        height = height - rect.height;
+        rect = footer.getBoundingClientRect();
+        height = height - rect.height;
+        resizeData.frmHeight = height + 'px';
+
+        parentDialog.parentElement.style.left = '0px';
+        parentDialog.style.left = resizeData.dlgLeft;
+        parentDialog.style.top = resizeData.dlgTop;
+        parentDialog.style.width = resizeData.dlgWidth;
+        parentDialog.style.height = resizeData.dlgHeight;
+        dlgBody.style.width = resizeData.dlgWidth;
+        dlgBody.style.height = resizeData.dlgHeight;
+        dlgContent.style.width = resizeData.dlgWidth;
+        dlgContent.style.height = resizeData.frmHeight;
+        frm.style.width = resizeData.frmWidth;
+        frm.style.height = resizeData.frmHeight;
+
+        var saveAs = document.getElementById('save_as');
+        var rect = saveAs.getBoundingClientRect();
+        var body = document.getElementsByTagName('body')[0]
+        body.style.heigh = resizeData.frmHeight;
+        var jsonEditorDiv = document.getElementById('jsoneditor');
+        jsonEditorDiv.style.height = (height - rect.height) + 'px';
+
+    };
+</script>
+</body>
+</html>
