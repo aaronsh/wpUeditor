@@ -30,7 +30,30 @@ if ( class_exists( "UEditor" ) ) {
     add_action('edit_page_form', array(&$ue, 'ue_renderUEditor'));
     add_action( 'plugins_unload', array(&$ue, 'ue_openDefaultEditor'));
 
+    add_filter('the_editor', 'enable_ueditor');
 }
+function enable_ueditor($editor_box){
+    if( strpos($editor_box, 'wp-content-editor-container') > 0 ){
+        $js=<<<js_enable_ueditor
+        <script type="text/javascript">
+                var ueditor_container = document.getElementById('postdivrich');
+                var editor_content = document.getElementById('content');
+                var ueditor_content = document.createElement('script');
+                ueditor_content.innerText = editor_content.innerText;
+                ueditor_container.appendChild(ueditor_content);
+                ueditor_content.setAttribute('id', 'postdivrich');
+                ueditor_content.setAttribute('class', 'postarea');
+                ueditor_container.removeAttribute('id');
+                ueditor_container.removeAttribute('class');
+                var mce_container = document.getElementById("wp-content-wrap");
+                mce_container.remove();
+        </script>
+js_enable_ueditor;
+        return $editor_box.$js;
+    }
+    return $editor_box;
+}
+
 function UEditorAjaxGetHandler(){
     include_once( dirname( __FILE__ ) . "/ueditor/php/imageManager.php" );
     exit;

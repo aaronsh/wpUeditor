@@ -55,17 +55,34 @@ if ( !class_exists( "UEditor" ) ) {
          */
         function ue_importUEditorResource(){
             $url = plugin_dir_url(__FILE__);
-            echo '<script type="text/javascript">window.UEDITOR_HOME_URL="'.$url .'ueditor/";</script>';
-            echo '<script type="text/javascript" src="'.$url.'ueditor/ueditor.config.js"></script>';
-            echo '<script type="text/javascript" src="'.$url.'ueditor/ueditor.all.js"></script>';
-            echo '<link type="text/css" rel="stylesheet" href=" '.$url.'ueditor/themes/default/css/ueditor.css" />';
+            echo '
+<script type="text/javascript">
+    window.UEDITOR_HOME_URL="'.$url .'ueditor/";
+</script>
+<script type="text/javascript" src="'.$url.'ueditor/ueditor.config.js"></script>
+<script type="text/javascript" src="'.$url.'ueditor/ueditor.all.js"></script>
+<link type="text/css" rel="stylesheet" href=" '.$url.'ueditor/themes/default/css/ueditor.css" />
+';
         }
 
         /**
          *实例化编辑器
          */
         function ue_renderUEditor(){
-            echo '<script type="text/javascript">var wp_ueditor = new baidu.editor.ui.Editor(' . $this->customConfigs .');wp_ueditor.render("'.$this->renderId.'");</script>';
+            echo '
+<script type="text/javascript">
+    var wp_ueditor = new baidu.editor.ui.Editor(' . $this->customConfigs .');
+    wp_ueditor.render("'.$this->renderId.'");
+
+    var mce_statusbar = document.getElementById("post-status-info");
+    mce_statusbar.remove();
+    window.addEventListener("load", function(){
+            var fullscreenDiv = document.getElementById("wp-fullscreen-body");
+            fullscreenDiv.remove();
+        }, false);
+</script>
+';
+//            wp_ueditor.render("'.$this->renderId.'");
         }
     }
 }
