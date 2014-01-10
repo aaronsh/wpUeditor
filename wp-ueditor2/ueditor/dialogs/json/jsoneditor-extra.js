@@ -29,19 +29,23 @@ function getTypeOf(obj) {
 
 function getJsonString(o) {
     var pieces = new Array();
-    var whitechar = '';
+
+    if (arguments[3] != undefined) {
+        pieces.push(arguments[3]);
+    }
+
+    var indent = 0;
+    if (arguments[2] != undefined) {
+        indent = arguments[2];
+    }
+    pieces.push('<p style="padding:0; margin:0 0 0 ');
+    pieces.push(indent);
+    pieces.push('em;">');
+
     if (arguments[1] != undefined && arguments[1] != null) {
         pieces.push('"');
         pieces.push(arguments[1]);
-        pieces.push('":')
-        whitechar = '&nbsp;';
-    }
-    var spaces = '';
-    var indent = '';
-    if (arguments[2] != undefined) {
-        spaces = arguments[2] + '&nbsp;&nbsp;&nbsp;&nbsp;';
-        indent = arguments[2];
-        pieces.push(whitechar);
+        pieces.push('":');
     }
     var typ = getTypeOf(o);
     switch (typ) {
@@ -49,20 +53,20 @@ function getJsonString(o) {
             pieces.push('<span style="color:red">');
             pieces.push(o.toString());
             pieces.push('</span>');
-            pieces.push('<br/>');
+            pieces.push('</p>');
             break;
         case 'boolean':
             pieces.push('<span style="color:purple">');
             pieces.push(o.toString());
             pieces.push('</span>');
-            pieces.push('<br/>');
+            pieces.push('</p>');
             break;
         case 'string':
             pieces.push('<span style="color:green">');
             var s = htmlspecialchars(JSON.stringify(o), 'ENT_QUOTES')
             pieces.push(s);
             pieces.push('</span>');
-            pieces.push('<br/>');
+            pieces.push('</p>');
             break;
         case 'date':
         case 'regexp':
@@ -73,40 +77,37 @@ function getJsonString(o) {
             pieces.push(s);
             pieces.push('"');
             pieces.push('</span>');
-            pieces.push('<br/>');
+            pieces.push('</p>');
             break;
         case 'null':
         case 'undefined':
             pieces.push('<span style="color:darkgrey">');
             pieces.push('null');
             pieces.push('</span>');
-            pieces.push('<br/>');
+            pieces.push('</p>');
             break;
         case 'object':
-            pieces.push('{');
-            var ch = '<br/>';
+            pieces.push('{</p>');
+            var ch = '';
             for (str in o) {
-                pieces.push(ch);
-                pieces.push(spaces);
-                pieces.push(getJsonString(o[str], str, spaces));
+                pieces.push(getJsonString(o[str], str, indent+2, ch));
                 ch = ',';
             }
-            pieces.push('<br/>');
+            pieces.push('<p style="padding:0; margin:0 0 0 ');
             pieces.push(indent);
-            pieces.push('}<br/>');
+            pieces.push('em;">');
+            pieces.push('}</p>');
             break;
         case 'array':
-            pieces.push('[');
-            var ch = '<br/>';
+            pieces.push('[</p>');
+            var ch = '';
             for (str in o) {
-                pieces.push(ch);
-                pieces.push(spaces);
-                pieces.push(getJsonString(o[str], null, spaces));
+                pieces.push(getJsonString(o[str], null, indent+2, ch));
                 ch = ',';
             }
-            pieces.push('<br/>');
+            pieces.push('<p style="padding:0; margin:0 0 0 ');
             pieces.push(indent);
-            pieces.push(']<br/>');
+            pieces.push('em;">]</p>');
             break;
     }
     var s = pieces.join('');
@@ -114,11 +115,8 @@ function getJsonString(o) {
 }
 
 function getJsonHtml(jsonObj) {
-    var html = getJsonString(jsonObj, null, '');
-    html = html.replace(/<br\/>,/gm, ',<br/>');
-    html = html.replace(/<br\/><br\/>/gm, '<br/>');
-    html = '<p style="margin:0px;">' + html.replace(/<br\/>/gm, '</p><p style="margin:0px;">') + '</p>';
-    html = html.replace(/<p style="margin:0px;"><\/p>/gm, '');
+    var html = getJsonString(jsonObj, null, 0);
+    html = html.replace(/<\/p>,/gm, ',</p>');
     return html;
 }
 

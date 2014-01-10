@@ -9,11 +9,16 @@
  */
 @include_once( dirname( __FILE__ ) . "/ueditor.class.php" );
 if ( class_exists( "UEditor" ) ) {
+    $ueditor_lang = 'en';
+    if( stripos($_SERVER['HTTP_ACCEPT_LANGUAGE'], 'zh-cn') !== false){
+        $ueditor_lang = 'zh-cn';
+    }
     $ue = new UEditor("postdivrich",array(
         //此处可以配置编辑器的所有配置项，配置方法同editor_config.js
         "focus"=>true,
         "textarea"=>"content",
-        "zIndex"=>1
+        "zIndex"=>1,
+        'lang'=>$ueditor_lang
     ));
     register_activation_hook( __FILE__, array(  &$ue, 'ue_closeDefaultEditor' ) );
     register_deactivation_hook( __FILE__, array(  &$ue, 'ue_openDefaultEditor' ) );
