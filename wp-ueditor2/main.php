@@ -32,15 +32,16 @@ function enable_ueditor($editor_box){
         <script type="text/javascript">
                 var ueditor_container = document.getElementById('postdivrich');
                 var editor_content = document.getElementById('content');
-                var ueditor_content = document.createElement('script');
-                ueditor_content.innerText = editor_content.innerText;
-                ueditor_container.appendChild(ueditor_content);
-                ueditor_content.setAttribute('id', 'postdivrich');
-                ueditor_content.setAttribute('class', 'postarea');
+                var ueditor_content_container = document.createElement('script');
+                var wp_ueditor_content = editor_content.defaultValue;
+                ueditor_container.appendChild(ueditor_content_container);
+                ueditor_content_container.setAttribute('id', 'postdivrich');
+                ueditor_content_container.setAttribute('class', 'postarea');
+                ueditor_content_container.setAttribute('type', 'text/plain');
                 ueditor_container.removeAttribute('id');
                 ueditor_container.removeAttribute('class');
                 var mce_container = document.getElementById("wp-content-wrap");
-                mce_container.remove();
+                mce_container.parentNode.removeChild(mce_container);
         </script>
 js_enable_ueditor;
         return $editor_box.$js;

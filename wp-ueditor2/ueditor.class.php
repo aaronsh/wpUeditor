@@ -73,12 +73,15 @@ if ( !class_exists( "UEditor" ) ) {
 <script type="text/javascript">
     var wp_ueditor = new baidu.editor.ui.Editor(' . $this->customConfigs .');
     wp_ueditor.render("'.$this->renderId.'");
+    wp_ueditor.addListener( "ready", function( editor ) {
+        wp_ueditor.setContent(wp_ueditor_content, false, false);
+    } );
 
     var mce_statusbar = document.getElementById("post-status-info");
-    mce_statusbar.remove();
+    mce_statusbar.parentNode.removeChild(mce_statusbar);
     window.addEventListener("load", function(){
             var fullscreenDiv = document.getElementById("wp-fullscreen-body");
-            fullscreenDiv.remove();
+            fullscreenDiv.parentNode.removeChild(fullscreenDiv);
         }, false);
 </script>
 ';
