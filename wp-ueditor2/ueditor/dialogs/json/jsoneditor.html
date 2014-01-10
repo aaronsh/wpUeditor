@@ -67,11 +67,19 @@
         var MyJsonEditor = new jsoneditor.JSONEditor(container, options);
         try {
             var jsonStr = editor.getContentTxt();
-            var jsonObj = JSON.parse(jsonStr);
-            MyJsonEditor.set(jsonObj);
+            jsonStr = jsonStr.replace(/(^\s*)|(\s*$)/g,'');
+            if( jsonStr.length > 0 ){
+                var jsonObj = JSON.parse(jsonStr);
+                MyJsonEditor.set(jsonObj);
+            }
         } catch (ex) {
-            console.log(ex.name + ":" + ex.message);
-            alert(ex.name + ":" + ex.message);
+            if( ex.name == 'SyntaxError'){
+                alert("Parse error! can not convert the contents to json !");
+            }
+            else{
+                console.log(ex.name + ":" + ex.message);
+                alert(ex.name + ":" + ex.message);
+            }
         }
         console.log(dialog);
 
