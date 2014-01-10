@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name: UEditor
- * Plugin URI: http://wordpress.org/extend/plugins/ck-and-syntaxhighlighter/
+ * Plugin URI: https://github.com/aaronsh/wpUeditor
  * Version: 1.3.0
  * Author: SamLiu, taoqili
- * Author URI: http://www.taoqili.com
- * Description: 强大的百度开源富文本编辑器UEditor正式登陆wordpress！
+ * Author URI: https://github.com/aaronsh/wpUeditor
+ * Description: 强大的百度开源富文本编辑器UEditor正式登陆wordpress！此插件最早由taoqili开发，SamLiu持续改进中。taoqili的网站为http://www.taoqili.com。感谢taoqili
  */
 @include_once( dirname( __FILE__ ) . "/ueditor.class.php" );
 if ( class_exists( "UEditor" ) ) {
